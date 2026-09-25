@@ -3,6 +3,99 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1073085130904694');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1073085130904694&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
+
+<!-- Facebook Conversions API (CAPI) & Tracking Script -->
+<script>
+(function() {
+  var PIXEL_ID = '1073085130904694';
+  var CAPI_TOKEN = 'EABRDPamu6mABPGDI1cdzGGkK0CZC0THUeeACXhXOWSZAAsyQi6jEF9CdUHRsZAo94YzJZB6RVukf5D5sBTjSXwLki9JwRBHFA5hxDENznaxuHrYDYZAoikzCLPqvKoGumKpiXxqY5t3XWRNJiNUPJo2TfphVSwUZCgH72ndiKSDLZBcat5HVcDCOCCNBxK4mKjAugZDZD';
+  var CAPI_URL = 'https://graph.facebook.com/v19.0/' + PIXEL_ID + '/events?access_token=' + CAPI_TOKEN;
+
+  function generateEventId() {
+    return 'evt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
+  }
+
+  function getCookie(name) {
+    var value = '; ' + document.cookie;
+    var parts = value.split('; ' + name + '=');
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+
+  function sendCapiEvent(eventName, eventId, customData) {
+    customData = customData || {};
+    var payload = {
+      data: [{
+        event_name: eventName,
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        event_source_url: window.location.href,
+        action_source: "website",
+        user_data: {
+          client_user_agent: navigator.userAgent,
+          fbp: getCookie('_fbp') || undefined,
+          fbc: getCookie('_fbc') || undefined
+        },
+        custom_data: customData
+      }]
+    };
+
+    fetch(CAPI_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(function(err) {
+      console.warn('CAPI notification:', err);
+    });
+  }
+
+  function trackFBEvent(eventName, customData) {
+    var eventId = generateEventId();
+    if (typeof fbq === 'function') {
+      fbq('track', eventName, customData || {}, { eventID: eventId });
+    }
+    sendCapiEvent(eventName, eventId, customData);
+  }
+
+  // PageView event with deduplication
+  var pageViewId = generateEventId();
+  if (typeof fbq === 'function') {
+    fbq('track', 'PageView', {}, { eventID: pageViewId });
+  }
+  sendCapiEvent('PageView', pageViewId);
+
+  // Track InitiateCheckout on checkout CTA click
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(e) {
+      var target = e.target.closest('a[href*="lastlink.com"], .btn-cta, .s-btn');
+      if (target) {
+        trackFBEvent('InitiateCheckout', {
+          content_name: 'Curso Geladinhos Gourmet',
+          currency: 'BRL'
+        });
+      }
+    });
+  });
+})();
+</script>
+<!-- End Facebook Conversions API Script -->
 	<meta charset="UTF-8">
 			<title>Geladinhos Gourmet</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
